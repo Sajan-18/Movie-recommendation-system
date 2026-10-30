@@ -1,0 +1,48 @@
+
+{% extends "base.html" %}
+{% block title %}{{ movie.title }} | CineGraph{% endblock %}
+
+{% block content %}
+<h1>{{ movie.title }} ({{ movie.year }})</h1>
+<p>{{ movie.genres | join(', ') }}</p>
+<p>{{ movie.description }}</p>
+<h5>Catalogue rating: ⭐ {{ movie.rating }}/10</h5>
+
+<hr>
+<h3>Write a Review</h3>
+
+<form method="POST" class="mb-4">
+    <label class="form-label">Your name or nickname</label>
+    <input class="form-control mb-3" name="reviewer"
+           maxlength="50" required>
+
+    <label class="form-label">Your rating</label>
+    <select class="form-select mb-3" name="rating" required>
+        {% for n in range(1, 6) %}
+        <option value="{{ n }}">{{ n }}/5</option>
+        {% endfor %}
+    </select>
+
+    <label class="form-label">Your review</label>
+    <textarea class="form-control mb-3" name="review"
+              maxlength="1000" rows="4" required></textarea>
+
+    <button class="btn btn-primary">Submit Review</button>
+</form>
+
+<h3>User Reviews</h3>
+{% for review in reviews %}
+<div class="card mb-3">
+    <div class="card-body">
+        <strong>{{ review.reviewer }}</strong>
+        <span> · {{ review.rating }}/5</span>
+        <p class="mb-0">{{ review.text }}</p>
+    </div>
+</div>
+{% else %}
+<p>No reviews submitted yet.</p>
+{% endfor %}
+
+<a href="{{ url_for('recommend', movie_id=movie.movie_id) }}"
+   class="btn btn-success mt-3">Find Similar Movies</a>
+{% endblock %}

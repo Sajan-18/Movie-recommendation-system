@@ -1,0 +1,52 @@
+
+{% extends "base.html" %}
+{% block title %}Movies | CineGraph{% endblock %}
+
+{% block content %}
+<h1>Discover Movies</h1>
+<p class="text-muted">Search films, explore genres and read reviews.</p>
+
+<form method="GET" class="row g-2 mb-4">
+    <div class="col-md-6">
+        <input class="form-control" name="search"
+               value="{{ search }}" placeholder="Search movie title">
+    </div>
+    <div class="col-md-4">
+        <select class="form-select" name="genre">
+            <option value="All">All genres</option>
+            {% for genre in genres %}
+            <option value="{{ genre }}"
+                {% if selected_genre == genre %}selected{% endif %}>
+                {{ genre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100">Search</button>
+    </div>
+</form>
+
+<div class="row g-3">
+    {% for movie in movies %}
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5>{{ movie.title }}</h5>
+                <p class="text-muted">
+                    {{ movie.year }} · {{ movie.genres | join(', ') }}
+                </p>
+                <p>{{ movie.description }}</p>
+                <p>⭐ Catalogue rating: {{ movie.rating }}/10</p>
+                <a class="btn btn-outline-primary"
+                   href="{{ url_for('movie_details', movie_id=movie.movie_id) }}">
+                    View details & reviews
+                </a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>No matching movies found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

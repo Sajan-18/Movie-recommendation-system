@@ -1,0 +1,56 @@
+
+{% extends "base.html" %}
+{% block title %}Insights | CineGraph{% endblock %}
+
+{% block content %}
+<h1>Movie Insights Dashboard</h1>
+
+<div class="row g-3 my-3">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Total Movies</h5>
+                <h2>{{ total_movies }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Total User Reviews</h5>
+                <h2>{{ total_reviews }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>Movies by Genre</h3>
+<table class="table table-striped">
+    <thead>
+        <tr><th>Genre</th><th>Movie Count</th></tr>
+    </thead>
+    <tbody>
+        {% for genre, count in genre_counts.items() %}
+        <tr><td>{{ genre }}</td><td>{{ count }}</td></tr>
+        {% else %}
+        <tr><td colspan="2">No data available.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Top-Rated Movies</h3>
+<table class="table table-striped">
+    <thead>
+        <tr><th>Movie</th><th>Year</th><th>Rating</th></tr>
+    </thead>
+    <tbody>
+        {% for movie in top_movies %}
+        <tr>
+            <td>{{ movie.title }}</td>
+            <td>{{ movie.year }}</td>
+            <td>{{ movie.rating }}/10</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

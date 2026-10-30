@@ -1,0 +1,56 @@
+
+{% extends "base.html" %}
+{% block title %}Recommendations | CineGraph{% endblock %}
+
+{% block content %}
+<h1>Movie Recommendations</h1>
+<p>Discover movies related to your favourite film.</p>
+
+<form method="GET" class="row g-2 mb-4">
+    <div class="col-md-8">
+        <select class="form-select" name="movie_id" required>
+            <option value="">Choose a movie</option>
+            {% for movie in movies %}
+            <option value="{{ movie.movie_id }}"
+                {% if selected and selected.movie_id == movie.movie_id %}
+                    selected
+                {% endif %}>
+                {{ movie.title }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-primary w-100">
+            Find Recommendations
+        </button>
+    </div>
+</form>
+
+{% if selected %}
+    <h4>Movies related to {{ selected.title }}</h4>
+    <p class="text-muted">{{ method }}</p>
+
+    <div class="row g-3">
+        {% for movie in recommendations %}
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5>{{ movie.title }}</h5>
+                    <p>{{ movie.year }}</p>
+                    <p>{{ movie.genres | join(', ') }}</p>
+                    <p>⭐ {{ movie.rating }}/10</p>
+                    <a class="btn btn-outline-primary"
+                       href="{{ url_for('movie_details',
+                                        movie_id=movie.movie_id) }}">
+                        View Movie
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p>No related movies found. Try another title.</p>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}
